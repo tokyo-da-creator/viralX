@@ -224,9 +224,13 @@ def score(item: dict, cfg: dict, now: float):
     if any(has_kw(text, k) for k in sc["off_topic"]):
         pts -= 5
         why.append("off-topic")
-    if not item["feed"].get("tcg_context") and not any(has_kw(text, k) for k in sc["tcg_terms"]):
-        pts -= 3
-        why.append("not clearly TCG")
+    if not item["feed"].get("tcg_context"):
+        if not any(has_kw(text, k) for k in sc.get("pokemon_terms", [])):
+            pts -= 8
+            why.append("not Pokémon")
+        elif not any(has_kw(text, k) for k in sc["tcg_terms"]):
+            pts -= 3
+            why.append("not clearly TCG")
 
     covered_by = aggregator_name(item, cfg)
     if covered_by:

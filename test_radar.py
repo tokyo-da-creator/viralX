@@ -94,6 +94,25 @@ class RadarTests(unittest.TestCase):
                                       "https://www3.nhk.or.jp")])
         self.assertEqual(len(alerts), 1)
 
+    def test_non_pokemon_card_ignored(self):
+        self.run_with([])
+        alerts = self.run_with([entry("Kobe Bryant card sells for $1.11 million after record price jump",
+                                      "Yahoo Sports", "https://sports.yahoo.com")])
+        self.assertEqual(alerts, [])
+
+    def test_viral_find_story_alerts(self):
+        self.run_with([])
+        alerts = self.run_with([entry("Grandma finds 1st Edition Charizard in attic, sells for $420,000",
+                                      "WKYC", "https://www.wkyc.com")])
+        self.assertEqual(len(alerts), 1)
+        self.assertGreaterEqual(alerts[0][2], 9)
+
+    def test_boring_deal_post_ignored(self):
+        self.run_with([])
+        alerts = self.run_with([entry("Best Pokémon TCG deals: 30th Celebration ETB on sale at Amazon",
+                                      "Mashable", "https://mashable.com")])
+        self.assertEqual(alerts, [])
+
     def test_money_parsing(self):
         f = radar.biggest_amount
         self.assertEqual(f("$70,000 in cards"), 70000)
