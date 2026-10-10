@@ -171,17 +171,21 @@ def has_kw(text: str, kw: str) -> bool:
     return re.search(r"(?<![a-z0-9])" + re.escape(kw) + r"(?![a-z0-9])", text) is not None
 
 
+# Short units (k, m, bn) only count when glued to the number ("$5m"), so "$41,800 m..." stays $41,800.
 MONEY = re.compile(
-    r"(?:us\$|ca\$|a\$|c\$|\$|£|€)\s?(\d[\d,]*(?:\.\d+)?)\s*(k|m|mn|million|billion|bn|thousand)?(?![a-z])"
+    r"(?:us\$|ca\$|a\$|c\$|\$|£|€)\s?(\d[\d,]*(?:\.\d+)?)(?:(k|m|mn|bn|mil)|\s*(thousand|million|billion))?(?![a-z0-9])"
     r"|(\d+(?:\.\d+)?)\s*(million|billion)(?![a-z])"
 )
-MULT = {"k": 1e3, "thousand": 1e3, "m": 1e6, "mn": 1e6, "million": 1e6, "billion": 1e9, "bn": 1e9}
+MULT = {"k": 1e3, "thousand": 1e3, "m": 1e6, "mn": 1e6, "mil": 1e6, "million": 1e6, "billion": 1e9, "bn": 1e9}
 
 
 def biggest_amount(text: str) -> float:
     best = 0.0
     for m in MONEY.finditer(text):
-        num, unit = (m.group(1), m.group(2)) if m.group(1) else (m.group(3), m.group(4))
+        if m.group(1):
+            num, unit = m.group(1), m.group(2) or m.group(3)
+        else:
+            num, unit = m.group(4), m.group(5)
         try:
             value = float(num.replace(",", "")) * MULT.get(unit or "", 1)
         except ValueError:

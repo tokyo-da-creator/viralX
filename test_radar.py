@@ -101,6 +101,8 @@ class RadarTests(unittest.TestCase):
         self.assertEqual(f("$70k gone"), 70000)
         self.assertEqual(f("worth 8.4 million dollars"), 8.4e6)
         self.assertEqual(f("no money here, 30th celebration"), 0)
+        self.assertEqual(f("scalpers flipped $41,800 m worth"), 41800)  # was read as $41.8B
+        self.assertEqual(f("$1.4mil"), 1.4e6)
 
 
 if __name__ == "__main__":

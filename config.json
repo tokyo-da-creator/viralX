@@ -29,7 +29,7 @@
     "PokeInvesting",
     "pokemoncardcollectors"
   ],
-  "reddit_weight": -1,
+  "reddit_weight": -3,
   "rss": [
     {
       "name": "PokeBeach",
@@ -239,7 +239,17 @@
       "ワンピース",
       "買取",
       "情報まとめ",
-      "予約・抽選情報"
+      "予約・抽選情報",
+      "unpopular opinion",
+      "hot take",
+      "rant",
+      "is it just me",
+      "thoughts?",
+      "discussion",
+      "ouroboros",
+      "what do you think",
+      "am i the only",
+      "psa:"
     ]
   }
 }
