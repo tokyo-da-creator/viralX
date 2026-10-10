@@ -1,0 +1,43 @@
+name: PokeRadar
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"   # every 5 min (GitHub may delay runs a few minutes under load)
+  workflow_dispatch: {}      # lets you hit "Run workflow" manually
+
+concurrency:
+  group: pokeradar
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      # Remember which stories were already alerted between runs
+      - uses: actions/cache/restore@v4
+        with:
+          path: state
+          key: radar-state-${{ github.run_id }}
+          restore-keys: radar-state-
+
+      - name: Scan feeds
+        run: python radar.py --state state/state.json
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+      - uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: state
+          key: radar-state-${{ github.run_id }}
