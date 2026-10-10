@@ -54,3 +54,15 @@ Everything lives in `config.json`, so no code changes are needed:
 - GitHub pauses scheduled workflows in public repos after 60 days with no commits. Push any small change to wake it up.
 - PokeBeach blocks some servers. If its feed fails in the logs, follow @PokeBeach on X with notifications on instead.
 - X, TikTok and Instagram have no free feeds, so keep your X Pro search columns for those.
+
+## AI Radar (Claude, ChatGPT, Grok news)
+
+A second radar runs alongside the Pokémon one and pushes to its **own** ntfy topic, so the feeds stay separate.
+
+It watches Google/Bing News, OpenAI's blog, and r/ClaudeAI, r/OpenAI, r/ChatGPT, r/grok and r/singularity. It alerts on model launches (GPT-6, Claude, Grok), lawsuits, leaks, outages, firings, funding and valuation news, and viral moments. Tips, prompt guides and deals are filtered out. Alert threshold: **7** (AI news is high-volume).
+
+Setup:
+1. In the ntfy app, subscribe to a second private topic.
+2. Add a repo secret `NTFY_TOPIC_AI` with that topic name (optional: `DISCORD_WEBHOOK_URL_AI`).
+
+Without that secret, the AI radar stays off. Tune it in `config-ai.json`.

@@ -225,10 +225,11 @@ def score(item: dict, cfg: dict, now: float):
         pts -= 5
         why.append("off-topic")
     if not item["feed"].get("tcg_context"):
-        if not any(has_kw(text, k) for k in sc.get("pokemon_terms", [])):
+        required = sc.get("required_terms") or sc.get("pokemon_terms", [])
+        if required and not any(has_kw(text, k) for k in required):
             pts -= 8
-            why.append("not Pokémon")
-        elif not any(has_kw(text, k) for k in sc["tcg_terms"]):
+            why.append("off-subject")
+        elif sc.get("tcg_terms") and not any(has_kw(text, k) for k in sc["tcg_terms"]):
             pts -= 3
             why.append("not clearly TCG")
 
@@ -378,7 +379,7 @@ def run_once(cfg: dict, state_path: str, dry_run: bool = False) -> list:
             print(f"{'':>17}{'covered by ' + covered if covered else 'upstream'} | {', '.join(why)}")
     else:
         if seeding:
-            notify("PokeRadar is live",
+            notify(f"{cfg.get('name', 'PokeRadar')} is live",
                    f"Watching {len(feeds) - len(failed)}/{len(feeds)} feeds. "
                    f"You'll only hear from me when a story scores {min_score}+.",
                    None, 3, ["satellite"])
@@ -416,9 +417,14 @@ def main():
     cfg = load_json(args.config)
     if cfg is None:
         sys.exit(f"config not found: {args.config}")
+    # A config can send its alerts to a different ntfy topic / Discord webhook
+    for key in ("NTFY_TOPIC", "DISCORD_WEBHOOK_URL"):
+        env_name = cfg.get(key.lower() + "_env")
+        if env_name:
+            os.environ[key] = os.environ.get(env_name, "")
 
     if args.test_notify:
-        ok = notify("PokeRadar test", "If you can read this, alerts work.", "https://x.com", 3, ["white_check_mark"])
+        ok = notify(f"{cfg.get('name', 'PokeRadar')} test", "If you can read this, alerts work.", "https://x.com", 3, ["white_check_mark"])
         sys.exit(0 if ok else 1)
 
     while True:

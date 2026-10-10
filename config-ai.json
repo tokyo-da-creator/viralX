@@ -1,0 +1,248 @@
+{
+  "name": "AI Radar",
+  "ntfy_topic_env": "NTFY_TOPIC_AI",
+  "discord_webhook_url_env": "DISCORD_WEBHOOK_URL_AI",
+  "min_score": 7,
+  "max_age_hours": 12,
+  "spread_threshold": 4,
+  "max_alerts_per_run": 5,
+  "google_news": {
+    "en": [
+      "(Claude OR Anthropic) (launch OR launches OR released OR announces OR new model)",
+      "(ChatGPT OR OpenAI) (launch OR launches OR released OR announces OR new model OR GPT)",
+      "(Grok OR xAI) (launch OR launches OR released OR announces OR new model)",
+      "(OpenAI OR Anthropic OR xAI) (lawsuit OR sued OR leak OR leaked OR outage OR banned OR fired OR resigns)",
+      "(OpenAI OR Anthropic OR xAI) (funding OR valuation OR billion OR acquisition OR acquires OR IPO)",
+      "(\"Sam Altman\" OR \"Dario Amodei\" OR \"Elon Musk\") (OpenAI OR Anthropic OR Grok OR xAI)",
+      "(ChatGPT OR Claude OR Grok) (viral OR backlash OR outrage OR \"went down\" OR down)",
+      "site:openai.com OR site:anthropic.com OR site:x.ai"
+    ],
+    "ja": []
+  },
+  "bing_news": [
+    "ChatGPT new feature",
+    "Claude AI Anthropic",
+    "Grok xAI"
+  ],
+  "reddit": [
+    "ClaudeAI",
+    "OpenAI",
+    "ChatGPT",
+    "grok",
+    "singularity"
+  ],
+  "reddit_weight": -4,
+  "rss": [
+    {
+      "name": "OpenAI News",
+      "url": "https://openai.com/news/rss.xml",
+      "tcg_context": true,
+      "weight": 2
+    }
+  ],
+  "aggregators": {
+    "theverge.com": "The Verge",
+    "techcrunch.com": "TechCrunch",
+    "engadget.com": "Engadget",
+    "wired.com": "Wired",
+    "arstechnica.com": "Ars Technica",
+    "9to5mac.com": "9to5Mac",
+    "9to5google.com": "9to5Google",
+    "tomsguide.com": "Tom's Guide",
+    "techradar.com": "TechRadar",
+    "zdnet.com": "ZDNET",
+    "cnet.com": "CNET",
+    "venturebeat.com": "VentureBeat",
+    "businessinsider.com": "Business Insider",
+    "gizmodo.com": "Gizmodo",
+    "mashable.com": "Mashable",
+    "the-decoder.com": "The Decoder",
+    "testingcatalog.com": "TestingCatalog",
+    "dexerto.com": "Dexerto",
+    "cnbc.com": "CNBC",
+    "bloomberg.com": "Bloomberg",
+    "reuters.com": "Reuters"
+  },
+  "scoring": {
+    "required_terms": [
+      "claude",
+      "anthropic",
+      "chatgpt",
+      "openai",
+      "gpt",
+      "sora",
+      "codex",
+      "grok",
+      "xai",
+      "x.ai",
+      "sam altman",
+      "altman",
+      "dario amodei",
+      "amodei"
+    ],
+    "tcg_terms": [],
+    "categories": {
+      "launch": {
+        "points": 3,
+        "words": [
+          "launch",
+          "launches",
+          "launched",
+          "released",
+          "releases",
+          "rolls out",
+          "rolling out",
+          "now available",
+          "new model",
+          "unveils",
+          "unveiled",
+          "announces",
+          "announced",
+          "introduces",
+          "gpt-6",
+          "gpt-5.5",
+          "claude 5",
+          "grok 5",
+          "grok 6",
+          "voice mode",
+          "agent",
+          "free users",
+          "free for everyone"
+        ]
+      },
+      "drama": {
+        "points": 3,
+        "words": [
+          "lawsuit",
+          "sued",
+          "sues",
+          "leak",
+          "leaked",
+          "leaks",
+          "outage",
+          "is down",
+          "went down",
+          "banned",
+          "ban",
+          "fired",
+          "resigns",
+          "quits",
+          "poached",
+          "feud",
+          "slams",
+          "mocks",
+          "backlash",
+          "outrage",
+          "controversy",
+          "scandal",
+          "investigation",
+          "subpoena",
+          "hacked",
+          "breach",
+          "jailbreak",
+          "went rogue",
+          "blackmail"
+        ]
+      },
+      "money": {
+        "points": 2,
+        "words": [
+          "funding",
+          "valuation",
+          "raises",
+          "raised",
+          "acquisition",
+          "acquires",
+          "ipo",
+          "trillion",
+          "price cut",
+          "price increase",
+          "free tier",
+          "subscription",
+          "$200"
+        ]
+      },
+      "wow": {
+        "points": 2,
+        "words": [
+          "first ever",
+          "first time",
+          "record",
+          "beats",
+          "beat humans",
+          "outperforms",
+          "agi",
+          "superintelligence",
+          "conscious",
+          "sentient",
+          "replaces",
+          "jobs",
+          "viral",
+          "went viral",
+          "shocking",
+          "insane",
+          "secret"
+        ]
+      },
+      "people": {
+        "points": 1,
+        "words": [
+          "elon musk",
+          "musk",
+          "sam altman",
+          "altman",
+          "dario amodei",
+          "amodei",
+          "zuckerberg",
+          "jensen huang",
+          "trump",
+          "pentagon",
+          "congress",
+          "senate"
+        ]
+      },
+      "flagship": {
+        "points": 3,
+        "words": [
+          "gpt-6",
+          "gpt-7",
+          "gpt-5.5",
+          "claude opus",
+          "claude sonnet",
+          "claude haiku",
+          "claude fable",
+          "claude mythos",
+          "claude 6",
+          "grok 5",
+          "grok 6",
+          "sora 3",
+          "new flagship",
+          "frontier model",
+          "most powerful"
+        ]
+      }
+    },
+    "off_topic": [
+      "tips",
+      "tricks",
+      "how to use",
+      "prompts to",
+      "best prompts",
+      "tutorial",
+      "guide",
+      "review:",
+      "deal",
+      "deals",
+      "discount",
+      "coupon",
+      "stock to buy",
+      "stocks to buy",
+      "should you buy",
+      "help",
+      "question",
+      "anyone else",
+      "is it just me",
+      "rant"
+    ]
+  }
+}

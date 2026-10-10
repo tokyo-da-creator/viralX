@@ -37,11 +37,20 @@ jobs:
           key: radar-state-${{ github.run_id }}
           restore-keys: radar-state-
 
-      - name: Scan every 3 minutes for 50 minutes
-        run: timeout 50m python radar.py --state state/state.json --loop 180 || true
+      - name: Scan every 3 minutes for 50 minutes (Pokémon + AI radars side by side)
+        run: |
+          timeout 50m python radar.py --state state/state.json --loop 180 > poke.log 2>&1 &
+          if [ -n "$NTFY_TOPIC_AI" ] || [ -n "$DISCORD_WEBHOOK_URL_AI" ]; then
+            timeout 50m python radar.py --config config-ai.json --state state/ai.json --loop 180 > ai.log 2>&1 &
+          fi
+          wait || true
+          echo "===== Pokémon radar ====="; cat poke.log
+          if [ -f ai.log ]; then echo "===== AI radar ====="; cat ai.log; fi
         env:
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          NTFY_TOPIC_AI: ${{ secrets.NTFY_TOPIC_AI }}
+          DISCORD_WEBHOOK_URL_AI: ${{ secrets.DISCORD_WEBHOOK_URL_AI }}
 
       - uses: actions/cache/save@v4
         if: always()
